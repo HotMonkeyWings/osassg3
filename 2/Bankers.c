@@ -1,6 +1,6 @@
 // Banker's Algorithm
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
 
 void a(int n, int m, int alloc[n][m], int max[n][m])
 {
@@ -70,8 +70,15 @@ void a(int n, int m, int alloc[n][m], int max[n][m])
     return;
 }
 
-bool b(int n, int m, int alloc[n][m], int max[n][m], int proc[n])
+void b(int n, int m, int alloc[n][m], int max[n][m], int proc[n])
 {
+    //Check if given processes are valid. If numbers are repeated it would simply give false anyway.
+    for(int i = 0; i < n; i++){
+        if(proc[i] >= n){
+            printf("Enter valid process numbers\n");
+            return;
+        }
+    }
     int i, j, k;
 
     int avail[4] = {1, 5, 2, 0}; // Available Resources
@@ -119,13 +126,14 @@ bool b(int n, int m, int alloc[n][m], int max[n][m], int proc[n])
     for (i = 0; i < n; i++)
         if (f[i] != 1 || ans[i] != proc[i])
         {
-            return false;
+            printf("\nInputted Process Sequence is not in SAFE STATE.\n");
+            return;
         }
-
-    return true;
+    printf("\nInputted Process Sequence is in SAFE STATE.\n");
+    return;
 }
 
-void c(int n, int m, int alloc[n][m], int max[n][m], int alloctest[n][m])
+void c(int n, int m, int alloc[n][m], int max[n][m], int alloctest[m])
 {
     int i, j, k;
 
@@ -171,31 +179,36 @@ void c(int n, int m, int alloc[n][m], int max[n][m], int alloctest[n][m])
         }
     }
 
-    for (i = 0; i < n; i++)
+    for (i = 0; i < m; i++)
     {
-        
+        if (alloctest[i] > avail[i])
+        {
+            printf("\nIt cannot run! Not enough available reasources!\n");
+            return;
+        }
     }
+    printf("\nProcess can run, there are enough resources available.\n");
     return;
 }
 
 int main()
 {
-    // P0, P1, P2, P3, P4 are the Process names here
+    //Number of processes, number of resources
+    int n, m;
 
-    int n, m, i, j, k;
-    n = 5;                            // Number of processes
-    m = 4;                            // Number of resources
-    int alloc[5][4] = {{0, 0, 1, 2},  // P0    // Allocation Matrix
-                       {1, 0, 0, 0},  // P1
-                       {1, 3, 5, 4},  // P2
-                       {0, 6, 3, 2},  // P3
-                       {0, 0, 1, 4}}; // P4
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+    printf("Enter number of resources for each process: ");
+    scanf("%d", &m);
 
-    int max[5][4] = {{0, 0, 1, 2},  // P0    // MAX Matrix
-                     {1, 7, 5, 0},  // P1
-                     {2, 3, 5, 6},  // P2
-                     {0, 6, 5, 2},  // P3
-                     {0, 6, 5, 6}}; // P4
+    //To store the processes and resources
+    int alloc[n][m];
+    int max[n][m];
+
+    //For B and C parts
+    int proc[n], alloctest[m];
+
+    int i, j, k;
 
     for (i = 0; i < n; i++)
     {
@@ -214,19 +227,70 @@ int main()
             scanf("%d", &max[i][j]);
         }
     }
-    //a(n ,m, alloc, max);
-    int proc[n];
-    printf("\nEnter the order of processes: ");
-    for (i = 0; i < n; i++)
+
+
+    
+
+    int opt;
+    printf("\n--Menu--\n\n1. Find the sequence for processes that is in the SAFE STATE\n\n2. Enter process sequence to see if its in SAFE STATE\n\n3. Check if a given resource can run.\n\n4. Enter new processes and resources\n\n5. Exit\n\n");
+
+    while (1)
     {
-        scanf("%d", &proc[i]);
-    }
-    if (b(n, m, alloc, max, proc))
-    {
-        printf("True");
-    }
-    else
-    {
-        printf("False");
+        printf("\nOption: ");
+        scanf(" %d", &opt);
+        switch (opt)
+        {
+        case 1:
+            a(n, m, alloc, max);
+            break;
+            
+        case 2:
+            printf("\nEnter the order of processes: ");
+            for (i = 0; i < n; i++)
+            {
+                scanf("%d", &proc[i]);
+            }
+            b(n, m, alloc, max, proc)
+            break;
+
+        case 3:
+            printf("Enter the resources needed for the new process: ");
+            for (int i = 0; i < m; i++)
+            {
+                scanf("%d", &alloctest[i]);
+            }
+            c(n, m, alloc, max, alloctest);
+            break;
+
+        case 4:
+            printf("Enter number of processes: ");
+            scanf("%d", &n);
+            printf("Enter number of resources for each process: ");
+            scanf("%d", &m);
+            for (i = 0; i < n; i++)
+            {
+                printf("\nEnter resources allocated by Process %d : ", i);
+                for (j = 0; j < m; j++)
+                {
+
+                    scanf("%d", &alloc[i][j]);
+                }
+            }
+            for (i = 0; i < n; i++)
+            {
+                printf("\nEnter Maximum resources used for Process %d: ", i);
+                for (j = 0; j < m; j++)
+                {
+                    scanf("%d", &max[i][j]);
+                }
+            }
+            break;
+
+        case 5:
+            exit(0);
+
+        default:
+            printf("Enter a valid option!\n");
+        }
     }
 }
