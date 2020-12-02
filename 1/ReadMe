@@ -1,0 +1,9 @@
+In order to compile,
+
+run gcc -o Mark Marks.c && gcc -o Stud Studs.c
+
+To run it,
+
+run ./Mark and ./Stud
+
+After which, follow along with instructions in the program.

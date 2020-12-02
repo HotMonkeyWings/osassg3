@@ -1,0 +1,7 @@
+Just compile the code with
+
+gcc DiningPhil.c
+
+And then run it using ./a.out
+
+To stop it, hit ctrl+c

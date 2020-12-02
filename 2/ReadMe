@@ -1,0 +1,6 @@
+In order to compile, 
+
+run gcc Bankers.c
+
+Then Input the Values for process resources and follow along.
+
