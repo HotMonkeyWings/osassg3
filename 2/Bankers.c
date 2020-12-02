@@ -1,6 +1,7 @@
 // Banker's Algorithm
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 void a(int n, int m, int alloc[n][m], int max[n][m])
 {
@@ -221,7 +222,7 @@ int main()
     }
     for (i = 0; i < n; i++)
     {
-        printf("\nEnter Maximum resources used for Process %d: ", i);
+        printf("\nEnter Maximum resources required for Process %d: ", i);
         for (j = 0; j < m; j++)
         {
             scanf("%d", &max[i][j]);
@@ -243,50 +244,59 @@ int main()
         case 1:
             a(n, m, alloc, max);
             break;
-            
+
         case 2:
             printf("\nEnter the order of processes: ");
             for (i = 0; i < n; i++)
             {
-                scanf("%d", &proc[i]);
+                scanf(" %d", &proc[i]);
             }
-            b(n, m, alloc, max, proc)
+            b(n, m, alloc, max, proc);
             break;
 
         case 3:
-            printf("Enter the resources needed for the new process: ");
+            printf("Enter the resources allocated for the new process: ");
             for (int i = 0; i < m; i++)
             {
-                scanf("%d", &alloctest[i]);
+                scanf(" %d", &alloctest[i]);
+            }
+
+            int temp;
+            printf("Enter the maximum resources required for the new process: ");
+            for (int i = 0; i < m; i++){
+                scanf(" %d", &temp);
+                alloctest[i] = temp - alloctest[i]; 
             }
             c(n, m, alloc, max, alloctest);
+
             break;
 
         case 4:
             printf("Enter number of processes: ");
-            scanf("%d", &n);
+            scanf(" %d", &n);
             printf("Enter number of resources for each process: ");
-            scanf("%d", &m);
+            scanf(" %d", &m);
             for (i = 0; i < n; i++)
             {
                 printf("\nEnter resources allocated by Process %d : ", i);
                 for (j = 0; j < m; j++)
                 {
 
-                    scanf("%d", &alloc[i][j]);
+                    scanf(" %d", &alloc[i][j]);
                 }
             }
             for (i = 0; i < n; i++)
             {
-                printf("\nEnter Maximum resources used for Process %d: ", i);
+                printf("\nEnter Maximum resources required for Process %d: ", i);
                 for (j = 0; j < m; j++)
                 {
-                    scanf("%d", &max[i][j]);
+                    scanf(" %d", &max[i][j]);
                 }
             }
             break;
 
         case 5:
+            printf("\nGoodbyte!\n");
             exit(0);
 
         default:
