@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void a(int n, int m, int alloc[n][m], int max[n][m])
+void a(int n, int m, int alloc[n][m], int max[n][m], int avail[m])
 {
     int i, j, k;
 
-    int avail[4] = {1, 5, 2, 0}; // Available Resources
+    
 
     int f[n], ans[n], ind = 0;
     for (k = 0; k < n; k++)
@@ -71,18 +71,69 @@ void a(int n, int m, int alloc[n][m], int max[n][m])
     return;
 }
 
-void b(int n, int m, int alloc[n][m], int max[n][m], int proc[n])
+void b(int n, int m, int alloc[n][m], int max[n][m], int proc[n], int avail[m])
 {
     //Check if given processes are valid. If numbers are repeated it would simply give false anyway.
-    for(int i = 0; i < n; i++){
-        if(proc[i] >= n){
+    for (int i = 0; i < n; i++)
+    {
+        if (proc[i] >= n)
+        {
+            printf("Enter valid process numbers\n");
+            return;
+        }
+    }
+
+    int need[n][m];
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            need[i][j] = max[i][j] - alloc[i][j];
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            if (need[proc[i]][j] > avail[j])
+            {
+                printf("\nInputted Process Sequence is not in SAFE STATE.\n");
+                return;
+            }
+            else
+            {
+                for (int k = 0; k < m; k++)
+                {
+                    avail[k] = avail[k] + alloc[proc[i]][k];
+                }
+            }
+        }
+    }
+    printf("\nThe Inputted Process Sequence is in SAFE STATE.\n");
+    return;
+}
+
+//Don't use this anymore
+void old_b(int n, int m, int alloc[n][m], int max[n][m], int proc[n])
+{
+    //Check if given processes are valid. If numbers are repeated it would simply give false anyway.
+    for (int i = 0; i < n; i++)
+    {
+        if (proc[i] >= n)
+        {
             printf("Enter valid process numbers\n");
             return;
         }
     }
     int i, j, k;
 
-    int avail[4] = {1, 5, 2, 0}; // Available Resources
+    int avail[m];
+    printf("Enter available resources: ");
+    for (int i = 0; i < m; i++)
+    {
+        scanf("%d", &avail[i]);
+    }
 
     int f[n], ans[n], ind = 0;
     for (k = 0; k < n; k++)
@@ -134,11 +185,10 @@ void b(int n, int m, int alloc[n][m], int max[n][m], int proc[n])
     return;
 }
 
-void c(int n, int m, int alloc[n][m], int max[n][m], int alloctest[m])
+void c(int n, int m, int alloc[n][m], int max[n][m], int alloctest[m], int avail[m])
 {
     int i, j, k;
 
-    int avail[4] = {1, 5, 2, 0}; // Available Resources
 
     int f[n], ans[n], ind = 0;
     for (k = 0; k < n; k++)
@@ -198,13 +248,14 @@ int main()
     int n, m;
 
     printf("Enter number of processes: ");
-    scanf("%d", &n);
-    printf("Enter number of resources for each process: ");
-    scanf("%d", &m);
+    scanf(" %d", &n);
+    printf("Enter number of resources: ");
+    scanf(" %d", &m);
 
     //To store the processes and resources
     int alloc[n][m];
     int max[n][m];
+    int avail[m];
 
     //For B and C parts
     int proc[n], alloctest[m];
@@ -217,7 +268,7 @@ int main()
         for (j = 0; j < m; j++)
         {
 
-            scanf("%d", &alloc[i][j]);
+            scanf(" %d", &alloc[i][j]);
         }
     }
     for (i = 0; i < n; i++)
@@ -225,12 +276,15 @@ int main()
         printf("\nEnter Maximum resources required for Process %d: ", i);
         for (j = 0; j < m; j++)
         {
-            scanf("%d", &max[i][j]);
+            scanf(" %d", &max[i][j]);
         }
     }
 
-
-    
+    printf("Enter available resources: ");
+    for (int i = 0; i < m; i++)
+    {
+        scanf(" %d", &avail[i]);
+    }
 
     int opt;
     printf("\n--Menu--\n\n1. Find the sequence for processes that is in the SAFE STATE\n\n2. Enter process sequence to see if its in SAFE STATE\n\n3. Check if a given resource can run.\n\n4. Enter new processes and resources\n\n5. Exit\n\n");
@@ -242,7 +296,7 @@ int main()
         switch (opt)
         {
         case 1:
-            a(n, m, alloc, max);
+            a(n, m, alloc, max, avail);
             break;
 
         case 2:
@@ -251,7 +305,7 @@ int main()
             {
                 scanf(" %d", &proc[i]);
             }
-            b(n, m, alloc, max, proc);
+            b(n, m, alloc, max, proc, avail);
             break;
 
         case 3:
@@ -263,19 +317,21 @@ int main()
 
             int temp;
             printf("Enter the maximum resources required for the new process: ");
-            for (int i = 0; i < m; i++){
+            for (int i = 0; i < m; i++)
+            {
                 scanf(" %d", &temp);
-                alloctest[i] = temp - alloctest[i]; 
+                alloctest[i] = temp - alloctest[i];
             }
-            c(n, m, alloc, max, alloctest);
+            c(n, m, alloc, max, alloctest, avail);
 
             break;
 
         case 4:
             printf("Enter number of processes: ");
             scanf(" %d", &n);
-            printf("Enter number of resources for each process: ");
+            printf("Enter number of resources: ");
             scanf(" %d", &m);
+
             for (i = 0; i < n; i++)
             {
                 printf("\nEnter resources allocated by Process %d : ", i);
@@ -285,6 +341,7 @@ int main()
                     scanf(" %d", &alloc[i][j]);
                 }
             }
+
             for (i = 0; i < n; i++)
             {
                 printf("\nEnter Maximum resources required for Process %d: ", i);
@@ -293,10 +350,17 @@ int main()
                     scanf(" %d", &max[i][j]);
                 }
             }
+
+            printf("Enter available resources: ");
+            for (int i = 0; i < m; i++)
+            {
+                scanf(" %d", &avail[i]);
+            }
+
             break;
 
         case 5:
-            printf("\nGoodbyte!\n");
+            printf("\nGoodbyte!(Pun intended)\n");
             exit(0);
 
         default:
