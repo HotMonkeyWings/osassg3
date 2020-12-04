@@ -1,6 +1,10 @@
 In order to compile, 
 
-run gcc Bankers.c
+run gcc Bankers.c && ./a.out
 
 Then Input the Values for process resources and follow along.
+
+This calculated by the general process that can be seen in the 3 separate functions used.
+
+
 
