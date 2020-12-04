@@ -7,3 +7,8 @@ To run it,
 run ./Mark and ./Stud
 
 After which, follow along with instructions in the program.
+
+The students and TA are run by nested fork calls, hence they are all different processes.
+The students cannot read other students' grades but the TA receives all of them.
+
+A message is then sent back after computing the grades to the CI from the TA.
